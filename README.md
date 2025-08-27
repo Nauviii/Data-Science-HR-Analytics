@@ -22,7 +22,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 ### 4. Menjalankan Dashboard
-cd fikri-kurnia-dashboard
+cd Fikri Kurnia-dashboard
 
 python app.py
 ##### Jika Menggunakan Sreamlit
