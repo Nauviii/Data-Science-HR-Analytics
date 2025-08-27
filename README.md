@@ -6,27 +6,23 @@ Pendekatan yang digunakan adalah **Machine Learning - KMeans Clustering**, lalu 
 ## 🚀 Cara Menjalankan Project
 
 ### 1. Clone Repository
-
+```bash
 git clone https://github.com/Nauviii/Data-Science-HR-Analytics.git
-
 cd submission
 
-### 2. Buat Virtual Environment (Opsional tapi direkomendasikan)
 python -m venv venv
 # Linux/Mac
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
 
-### 3. Install Depedencies
 pip install -r requirements.txt
 
-### 4. Menjalankan Dashboard
-cd Fikri Kurnia-dashboard
-
+cd "Fikri Kurnia-dashboard"
 python app.py
-##### Jika Menggunakan Sreamlit
+# atau Streamlit
 streamlit run app.py
+```
 
 ## 📊 Alur Analisis
 
