@@ -114,7 +114,7 @@ def show_insight(df: pd.DataFrame) -> None:
 def main() -> None:
     st.title("📈 Dashboard Analisis Clustering - Attrition")
 
-    df_summary = load_summary("../model/model_summary.joblib")  
+    df_summary = load_summary("model_summary.joblib")  
 
     tab1, tab2, tab3 = st.tabs(["Ringkasan", "Detail Cluster", "Insight"])
 
