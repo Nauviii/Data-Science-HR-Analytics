@@ -3,6 +3,9 @@ import pandas as pd
 import joblib
 import plotly.express as px
 
+st.set_page_config(layout="wide")
+
+
 #  Utilities 
 def ensure_cluster_column(df: pd.DataFrame) -> pd.DataFrame:
     df2 = df.copy()
@@ -25,7 +28,6 @@ def load_summary(path: str) -> pd.DataFrame:
 
 #  Plot Functions 
 def plot_cluster_proportion(df: pd.DataFrame) -> None:
-    # df sudah dipastikan memiliki kolom 'Cluster' oleh ensure_cluster_column
     fig = px.pie(
         df,
         names="Cluster",
@@ -67,22 +69,27 @@ def show_detail(df: pd.DataFrame) -> None:
 
     cluster_row = df.loc[df["Cluster"] == selected_cluster].squeeze()
 
+    # --- Karakteristik Cluster (Improved) ---
     st.write("### Karakteristik Cluster")
-    st.json(cluster_row.to_dict())
 
-    st.write("### Visualisasi Variabel Numerik")
-    numeric_cols = [
-        "Age", "TotalWorkingYears", "YearsWithCurrManager", "JobLevel",
-        "YearsInCurrentRole", "YearsAtCompany", "MonthlyIncome"
-    ]
-    # Buat dataframe panjang untuk plot
-    plot_df = pd.DataFrame({
-        "Feature": numeric_cols,
-        "Mean": [cluster_row[col] for col in numeric_cols]
-    })
-    fig = px.bar(plot_df, x="Feature", y="Mean",
-                 title=f"Rata-rata Variabel Numerik - Cluster {selected_cluster}")
-    st.plotly_chart(fig, use_container_width=True)
+    # Tampilkan tabel ringkas
+    char_df = pd.DataFrame(cluster_row).reset_index()
+    char_df.columns = ["Atribut", "Nilai"]
+    st.dataframe(char_df, use_container_width=True)
+
+    # Pisahkan numerik & kategorik dari Series
+    exclude_cols = ["Cluster"]
+    char_data = cluster_row.drop(labels=exclude_cols, errors="ignore")
+
+    num_data = char_data[char_data.apply(lambda x: pd.api.types.is_numeric_dtype(type(x)))]
+    cat_data = char_data[~char_data.apply(lambda x: pd.api.types.is_numeric_dtype(type(x)))]
+
+
+    # Kalau ada kategorik, tampilkan tabel kecil
+    if not cat_data.empty:
+        st.write("#### Atribut Kategorikal")
+        st.table(cat_data.reset_index().rename(columns={"index": "Atribut", 0: "Nilai"}))
+
 
 
 def show_insight(df: pd.DataFrame) -> None:
@@ -114,7 +121,7 @@ def show_insight(df: pd.DataFrame) -> None:
 def main() -> None:
     st.title("📈 Dashboard Analisis Clustering - Attrition")
 
-    df_summary = load_summary("model_summary.joblib")  
+    df_summary = load_summary("data_summary.joblib")  
 
     tab1, tab2, tab3 = st.tabs(["Ringkasan", "Detail Cluster", "Insight"])
 
