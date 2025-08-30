@@ -3,25 +3,11 @@
 Project ini membahas **HR Analytics** dengan fokus pada **attrition (tingkat keluar-masuk karyawan)**.  
 Pendekatan yang digunakan adalah **Machine Learning - KMeans Clustering**, lalu divisualisasikan melalui **dashboard interaktif** untuk mendapatkan insight yang lebih mudah dipahami.
 
-## 🚀 Cara Menjalankan Project
+## 🚀 Cara Menjalankan Dashboard
 
-### 1. Clone Repository
+
 ```bash
-git clone https://github.com/Nauviii/Data-Science-HR-Analytics.git
-cd submission
-
-python -m venv venv
-# Linux/Mac
-source venv/bin/activate
-# Windows
-venv\Scripts\activate
-
-pip install -r requirements.txt
-
-cd "Fikri Kurnia-dashboard"
-python app.py
-# atau Streamlit
-streamlit run app.py
+https://hr-analytics-app.streamlit.app/
 ```
 
 ## 📊 Alur Analisis
