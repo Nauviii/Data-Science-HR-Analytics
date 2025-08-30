@@ -90,49 +90,95 @@ def show_detail(df: pd.DataFrame) -> None:
         st.write("#### Atribut Kategorikal")
         st.table(cat_data.reset_index().rename(columns={"index": "Atribut", 0: "Nilai"}))
 
+# --- Mapping Cluster Number -> Label ---
+def map_cluster_labels(df: pd.DataFrame) -> pd.DataFrame:
+    mapping = {0: "A", 1: "B"}
+    df = df.copy()
+    if df["Cluster"].dtype != "object":  # kalau masih angka
+        df["Cluster"] = df["Cluster"].map(mapping)
+    return df
 
 
 def show_insight(df: pd.DataFrame) -> None:
-    st.subheader("💡 Insight & Rekomendasi")
-    high_attrition_cluster = df.loc[df["Attrition Proportion"].idxmax()]
-    low_attrition_cluster = df.loc[df["Attrition Proportion"].idxmin()]
+    # --- Ranking Cluster berdasarkan attrition ---
+    ranking_df = df[["Cluster", "Cluster Size", "Attrition Proportion"]].copy()
+    ranking_df = ranking_df.sort_values("Attrition Proportion", ascending=False).reset_index(drop=True)
+
+    # --- Tampilkan cluster dengan attrition tertinggi & terendah ---
+    col1, col2 = st.columns(2)
+    top = ranking_df.iloc[0]
+    low = ranking_df.iloc[-1]
+
+    with col1:
+        st.subheader("Cluster Attrition Tertinggi")
+        st.metric(label="Attrition Rate",
+                  value=f"{top['Attrition Proportion']:.2%}",
+                  delta=f"Ukuran: {top['Cluster Size']} karyawan")
+
+    with col2:
+        st.subheader("Cluster Attrition Terendah")
+        st.metric(label="Attrition Rate",
+                  value=f"{low['Attrition Proportion']:.2%}",
+                  delta=f"Ukuran: {low['Cluster Size']} karyawan")
+
+    # --- Insight & Rekomendasi ---
+    st.subheader("Insight & Rekomendasi Strategi Retensi")
 
     st.markdown(f"""
-- **Cluster dengan attrition tertinggi**: Cluster **{int(high_attrition_cluster['Cluster'])}** 
-  (Proporsi Attrition = **{high_attrition_cluster['Attrition Proportion']:.2%}**)
-- **Cluster dengan attrition terendah**: Cluster **{int(low_attrition_cluster['Cluster'])}** 
-  (Proporsi Attrition = **{low_attrition_cluster['Attrition Proportion']:.2%}**)
-""")
+    - Fokus utama strategi retensi perlu diarahkan ke **Cluster {top['Cluster']}** dengan prioritas pada pengembangan karier, kompensasi, dan adaptasi manajemen baru.  
+    - Sementara itu, **Cluster {low['Cluster']}** perlu tetap dijaga stabilitasnya melalui penghargaan, fleksibilitas, dan motivasi kerja jangka panjang.  
 
-    st.write("### Rekomendasi Strategi Retensi")
-    st.markdown("""
-- Untuk cluster dengan attrition tinggi:
-  - Tingkatkan program career development & mentoring.
-  - Review sistem kompensasi & benefit (terutama bagi level junior).
-  - Pertimbangkan fleksibilitas kerja dan beban kerja.
+    Berdasarkan hasil clustering:
 
-- Untuk cluster dengan attrition rendah:
-  - Pertahankan kepuasan kerja melalui penghargaan & insentif.
-  - Pastikan jalur karier tetap jelas agar loyalitas terjaga.
-""")
+    - **Cluster {top['Cluster']}** memiliki tingkat attrition **paling tinggi** sebesar **{top['Attrition Proportion']:.2%}**.
+      Karakteristik umum: usia & masa kerja relatif lebih muda, jabatan dan pendapatan cenderung lebih rendah.  
+      Rekomendasi: fokus pada *career development program*, peningkatan kompensasi, dan program engagement untuk generasi muda.
+
+    - **Cluster {low['Cluster']}** memiliki tingkat attrition **paling rendah** sebesar **{low['Attrition Proportion']:.2%}**.
+      Karakteristik umum: karyawan lebih senior, pendapatan lebih tinggi, loyalitas lebih baik.  
+      Rekomendasi: tetap pertahankan kepuasan kerja dengan *recognition*, fleksibilitas, dan peluang kepemimpinan.
+
+    Secara keseluruhan, strategi retensi bisa diarahkan dengan memprioritaskan **Cluster {top['Cluster']}**,
+    tanpa mengabaikan kebutuhan pengembangan & motivasi bagi **Cluster {low['Cluster']}**.
+    """)
 
 
-#  Main App 
+
+
+# --- KPI Section ---
+def show_kpi(df: pd.DataFrame) -> None:
+    total_employees = df["Cluster Size"].sum()
+    n_clusters = df["Cluster"].nunique()
+    avg_attrition = df["Attrition Proportion"].mean()
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("👥 Total Karyawan", f"{total_employees}")
+    col2.metric("🔎 Jumlah Cluster", f"{n_clusters}")
+    col3.metric("📉 Rata-rata Attrition", f"{avg_attrition:.2%}")
+
+
+
+
+# --- Main App (ubah sedikit) ---
 def main() -> None:
-    st.title("📈 Dashboard Analisis Clustering - Attrition")
+    st.title("📈 Dashboard HR Analytics - Attrition Clustering")
 
     df_summary = load_summary("data_summary.joblib")  
+    df_summary = map_cluster_labels(df_summary)  
+
+    show_kpi(df_summary)   # <---- Tambahan KPI
 
     tab1, tab2, tab3 = st.tabs(["Ringkasan", "Detail Cluster", "Insight"])
 
     with tab1:
-        show_summary(df_summary)
+        show_summary(df_summary)    
 
     with tab2:
         show_detail(df_summary)
 
     with tab3:
         show_insight(df_summary)
+
 
 
 if __name__ == "__main__":
