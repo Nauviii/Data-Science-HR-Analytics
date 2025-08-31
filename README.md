@@ -1,48 +1,92 @@
-# HR Analytics: Employee Attrition Clustering Dashboard
+# Proyek Akhir: Menyelesaikan Permasalahan Perusahaan Edutech
 
-Project ini membahas **HR Analytics** dengan fokus pada **attrition (tingkat keluar-masuk karyawan)**.  
-Pendekatan yang digunakan adalah **Machine Learning - KMeans Clustering**, lalu divisualisasikan melalui **dashboard interaktif** untuk mendapatkan insight yang lebih mudah dipahami.
+## Business Understanding
 
-## 🚀 Cara Menjalankan Dashboard
+**Latar Belakang**  
+Jaya Jaya Maju adalah perusahaan multinasional di bidang Edutech yang berdiri sejak tahun 2000 dengan lebih dari 1.000 karyawan tersebar di seluruh Indonesia.  
+Meskipun perusahaan sudah berkembang pesat, tingkat **attrition rate** (rasio karyawan keluar terhadap total karyawan) perusahaan cukup tinggi, mencapai **>10%**.  
+Tingginya attrition rate berpotensi meningkatkan biaya perekrutan, pelatihan, dan mengganggu produktivitas perusahaan.  
+Untuk itu, manajemen HR ingin memahami faktor-faktor yang memengaruhi keputusan karyawan untuk keluar dan mengembangkan strategi retensi yang tepat.  
 
+---
 
+## Permasalahan Bisnis
+- Mengidentifikasi faktor-faktor utama penyebab tingginya attrition rate.  
+- Mengatasi **data imbalance** dalam dataset attrition.  
+- Membuat model prediksi attrition karyawan berbasis Machine Learning.  
+- Menyediakan insight berbasis data untuk membantu pengambilan keputusan manajemen.  
+
+---
+
+## Cakupan Proyek
+1. **Data Preprocessing & Feature Engineering**  
+   - Membersihkan data, menangani missing values, encoding fitur kategorikal, dan scaling.  
+2. **Exploratory Data Analysis (EDA)**  
+   - Visualisasi dan analisis statistik untuk menemukan pola dan insight.  
+3. **Model Machine Learning**  
+   - Membangun model klasifikasi untuk memprediksi attrition karyawan.  
+4. **Evaluasi Model**  
+   - Menggunakan metrik evaluasi seperti Confusion Matrix, Classification Report, dan ROC-AUC.  
+5. **Dashboard Interaktif**  
+   - Membuat aplikasi analisis berbasis **Streamlit** untuk memudahkan eksplorasi data dan insight.  
+
+---
+
+## Persiapan
+### 🔗 Dataset
+- **Sumber Data**: [Employee Data - Dicoding](https://github.com/dicodingacademy/dicoding_dataset/blob/main/employee/employee_data.csv)  
+- **Jumlah Data**: 1.470 karyawan dengan tingkat attrition **12.18%** (179 karyawan keluar).  
+
+---
+
+### 🛠️ Tech Stack
+- **Python** (Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn)
+- **Streamlit** (Pembuatan Dashboard)
+- **Joblib** (Model Serialization)
+- **GitHub** (Version Control)
+
+---
+
+### ⚙️ Persiapan & Setup
+Clone repository dan install dependencies:
 ```bash
-https://hr-analytics-app.streamlit.app/
+git clone https://github.com/Nauviii/Data-Science-HR-Analytics.git
+cd Data-Science-HR-Analytics
+pip install -r requirements.txt
+streamlit run app.py
 ```
 
-## 📊 Alur Analisis
+## Business Dashboard
 
-1. Eksplorasi Data
-    - Dilakukan melalui notebook.ipynb
-    - Meliputi preprocessing, EDA, dan feature engineering
+🔗 Akses Dashboard: https://hr-analytics-app.streamlit.app/
 
-2. Clustering dengan KMeans
-    - Model KMeans dilatih untuk membagi karyawan ke dalam beberapa cluster berdasarkan atribut yang relevan dengan attrition.
+Dashboard ini adalah aplikasi interaktif berbasis Streamlit yang membantu stakeholder menganalisis tingkat attrition. Dashboard mencakup:
+1. EDA (Exploratory Data Analysis) – Visualisasi distribusi data dan korelasi antar fitur.
+2. Model Results – Hasil prediksi attrition dengan metrik evaluasi.
+3. Insights & Recommendations – Temuan utama dan rekomendasi actionable.
 
-    - File model:
+## Conclusion
+📋 Ringkasan Proyek
 
-       1. model_summary.joblib → ringkasan clustering, digunakan di dashboard
+Proyek ini mengembangkan end-to-end pipeline data science untuk memprediksi attrition karyawan dan menyajikan insight melalui dashboard interaktif.
+- Data: 1.470 karyawan, attrition rate 12.18%.
+- Hasil: Model Machine Learning teroptimasi dengan PCA untuk dimensionality reduction, tersimpan dalam format joblib.
+- Output: Dashboard analitik HR berbasis Streamlit.
 
-       2. kmeans_model.joblib → model KMeans asli, bisa digunakan untuk prediksi tambahan
+## Rekomendasi Action Items (Optional)
+1. Peningkatan Kepuasan Kerja & Lingkungan
+        - Rutin melakukan employee engagement survey.
+        - Program kesejahteraan dan komunikasi terbuka.
 
-3. Dashboard
-    - app.py menggunakan model hasil clustering untuk menampilkan insight, visualisasi, dan analisis interaktif.
+2. Program Retensi Karyawan Muda
+        - Mentorship, pelatihan soft skill, dan rotasi kerja.
 
-## 📌 Insight Utama
-  - Segmentasi karyawan berdasarkan risiko attrition
-  - Faktor-faktor yang memengaruhi tingkat attrition
-  - Distribusi cluster untuk mendukung keputusan HR
+3. Optimasi Manajemen R&D
+        - Evaluasi beban kerja, pemberian reward untuk inovasi.
+   
+4. Dukungan Transisi Manajemen
+        - Onboarding manager baru & sesi check-in rutin.
 
-## 📦 Requirements
+5. Perbaikan Kompensasi & Benefit
+        - Benchmarking gaji dan penawaran benefit non-finansial.
 
-Dependencies utama dapat dilihat di requirements.txt
-
-🙌 Kontributor
-
-Project ini dikerjakan oleh:
-
-  - Fikri Kurnia (@Nauviii)
-
-## 📄 Lisensi
-
-Project ini dibuat untuk kebutuhan submission Dicoding dan hanya digunakan untuk tujuan pembelajaran.
